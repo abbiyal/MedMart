@@ -1,0 +1,41 @@
+package medcart.models;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Cart {
+	public  String CustomerId;
+	private String cartId;
+	private List<Item> items=new ArrayList<>();
+	
+	public Cart(String customerId, String cartId, List<Item> items) {
+		CustomerId = customerId;
+		this.cartId = cartId;
+		this.items = items;
+	}
+
+	public String getCustomerId() {
+		return CustomerId;
+	}
+
+	public void setCustomerId(String customerId) {
+		CustomerId = customerId;
+	}
+
+	public String getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(String cartId) {
+		this.cartId = cartId;
+	}
+
+	public List<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Item> items) {
+		this.items = items;
+	}
+
+}

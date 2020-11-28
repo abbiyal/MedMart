@@ -1,0 +1,25 @@
+package medcart.models;
+
+import java.io.Serializable;
+
+@Embeddable
+public class CartPrimaryId implements Serializable{
+		
+	private long cartId;
+	private String userId;
+	private Item item;
+	
+	
+	public CartPrimaryId() {
+		
+	}
+
+
+	public CartPrimaryId(long cartId, String userId, Item item) {
+		this.cartId = cartId;
+		this.userId = userId;
+		this.item = item;
+	}
+	
+	
+}

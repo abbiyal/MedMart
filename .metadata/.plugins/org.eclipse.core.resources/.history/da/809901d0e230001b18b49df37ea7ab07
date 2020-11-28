@@ -1,0 +1,59 @@
+package medcart.services;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import medcart.models.Cart;
+import medcart.models.CartRepository;
+import medcart.models.Item;
+import medcart.models.ItemRepository;
+
+@Service
+public class CartService {
+	
+//	private RestTemplate restTemplate=new RestTemplate();
+	
+	@Autowired
+	private CartRepository cartRepository;
+	
+	@Autowired
+	private ItemService itemService;
+	
+	public String createNewCart(Cart cart)
+	{
+		cartRepository.save(cart);
+		return "success";
+	}	
+	public Optional<Cart> getCartById(String userId)
+	{
+		return cartRepository.findCartByUserId(userId);
+	}
+	
+	public String addCartItem(Cart cart)
+	{
+		
+		cartRepository.save(cart);
+		return "success";
+	}
+	
+	public String updateCart(Cart cart)
+	{
+		cartRepository.save(cart);
+		return "success";
+	}
+	public String deleteCart(String userId)
+	{
+		Optional<Cart> cart=cartRepository.findCartByUserId(userId);
+		long id=cart.get().getCartId();
+		List<Item> items=cart.get().getItem();
+		cartRepository.deleteById(id);
+		items.forEach(p->itemService.deleteItem(p.getItemid()));
+		return "success";
+	}
+
+}

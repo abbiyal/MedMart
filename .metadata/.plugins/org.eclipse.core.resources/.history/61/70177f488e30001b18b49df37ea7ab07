@@ -1,0 +1,90 @@
+package medcart.models;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.sun.istack.NotNull;
+
+@Entity
+@Table(name="Item")
+public class Item {
+
+	@Id
+	private long itemid;
+//	private long cartId;
+	@NotNull
+	private int quantity;
+	@NotNull
+	private double price;
+	private String name;
+	private String Imageurl;
+	
+	
+	
+	
+	
+	public Item() {
+		
+	}
+
+	public Item(long itemid, int quantity, double price, String name, String imageurl) {
+//		this.cartId = cartId;
+		this.itemid=itemid;
+		this.quantity = quantity;
+		this.price = price;
+		this.name = name;
+		Imageurl = imageurl;
+	}
+	
+	public long getItemid() {
+		return itemid;
+	}
+	public void setItemid(long itemid) {
+		this.itemid = itemid;
+	}
+//	public long getCartId() {
+//		return cartId;
+//	}
+//	public void setCartId(long cartId) {
+//		this.cartId = cartId;
+//	}
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getImageurl() {
+		return Imageurl;
+	}
+	public void setImageurl(String imageurl) {
+		Imageurl = imageurl;
+	}
+
+	@Override
+	public String toString() {
+		return "Item [itemid=" + itemid + ", quantity=" + quantity + ", price=" + price + ", Name=" + name
+				+ ", Imageurl=" + Imageurl + "]";
+	}
+	
+	
+	
+	
+	
+	
+}

@@ -1,0 +1,30 @@
+package medcart.models;
+
+import java.io.Serializable;
+
+import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
+@Embeddable
+public class CartPrimaryId implements Serializable{
+		
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long cartId;
+	private String userId;
+	private long itemid;
+	
+	
+	public CartPrimaryId() {
+		
+	}
+
+
+	public CartPrimaryId(long cartId, String userId,long itemid) {
+		this.cartId = cartId;
+		this.userId = userId;
+		this.itemid = itemid;
+	}
+	
+	
+}
