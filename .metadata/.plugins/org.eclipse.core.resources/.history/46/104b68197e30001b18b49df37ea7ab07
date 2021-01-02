@@ -1,0 +1,32 @@
+package medcart.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import medcart.models.Item;
+import medcart.models.ItemRepository;
+
+@Service
+public class itemService {
+	
+	@Autowired
+	ItemRepository itemRepository;
+	
+	public String addItem(Item item)
+	{
+		itemRepository.save(item);
+		return "success item added";
+	}
+	
+	public String updateItem(Item item)
+	{
+		itemRepository.save(item);
+		return "updated item";
+	}
+	
+	public String deleteItem(long itemid)
+	{
+		itemRepository.deleteById(itemid);
+		return "item deleted";
+	}
+}

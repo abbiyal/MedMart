@@ -1,0 +1,68 @@
+package medcart.models;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.sun.istack.NotNull;
+
+@Entity
+@Table(name="Item")
+public class Item {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private String id;
+	@NotNull
+	private int quantity;
+	@NotNull
+	private double price;
+	private String Name;
+	private String Imageurl;
+	
+	
+	
+	public Item(String id, int quantity, double price, String name, String imageurl) {
+		this.id = id;
+		this.quantity = quantity;
+		this.price = price;
+		Name = name;
+		Imageurl = imageurl;
+	}
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public String getName() {
+		return Name;
+	}
+	public void setName(String name) {
+		Name = name;
+	}
+	public String getImageurl() {
+		return Imageurl;
+	}
+	public void setImageurl(String imageurl) {
+		Imageurl = imageurl;
+	}
+	
+	
+	
+}

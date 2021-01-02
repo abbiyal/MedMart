@@ -1,0 +1,47 @@
+package medcart.services;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import medcart.models.Cart;
+import medcart.models.CartRepository;
+import medcart.models.Item;
+
+@Service
+public class CartService {
+	
+//	private RestTemplate restTemplate=new RestTemplate();
+	
+	@Autowired
+	private CartRepository cartRepository;
+	
+	public String createNewCart(String userId)
+	{
+		List<Item> items=new ArrayList<>();
+		Cart cart=new Cart(userId,items,"1aa","NEW",0);
+		cartRepository.save(cart);
+		return "success";
+	}	
+	public Optional<Cart> getCartById(String userId)
+	{
+		return cartRepository.findByUserId(userId);
+	}
+	
+	public String addCartItem(Cart cart)
+	{
+		cartRepository.save(cart);
+		return "success";
+	}
+	
+	public String updateCart(Cart cart,Item item)
+	{
+		cartRepository.save(cart);
+		return "success";
+	}
+
+}
