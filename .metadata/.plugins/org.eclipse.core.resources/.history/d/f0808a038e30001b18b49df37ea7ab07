@@ -1,0 +1,5 @@
+package medcart.models;
+
+public class CartPrimaryId {
+
+}

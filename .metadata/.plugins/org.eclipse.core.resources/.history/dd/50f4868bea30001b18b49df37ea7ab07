@@ -1,0 +1,41 @@
+package medcart.models;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.sun.istack.NotNull;
+
+@Entity
+@Table(name="Cart_Item")
+public class Item {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+	@NotNull
+	private long itemId;
+	@ManyToOne
+	private Cart cart;
+	@NotNull
+	private int quantity;
+	@NotNull
+	private double price;
+	private String name;
+	private String imageUrl;
+	public Item(long itemId, Cart cart, int quantity, double price, String name, String imageUrl) {
+		this.itemId = itemId;
+		this.cart = cart;
+		this.quantity = quantity;
+		this.price = price;
+		this.name = name;
+		this.imageUrl = imageUrl;
+	}
+	
+	
+	
+	
+}

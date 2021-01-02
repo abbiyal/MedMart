@@ -1,0 +1,17 @@
+package medcart.models;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+public interface ItemRepository extends CrudRepository<Item,Long>{
+	
+	public List<Item> findItemByCartId(long cartId);
+	public void deleteItemByCartId(long cartId);
+	@Query("DELETE FROM Item WHERE  Item.itemId=itemId")
+	public void deleteItemCart(@Param("cartId") long cartId,@Param("itemId") long itemId);
+	
+	
+}
