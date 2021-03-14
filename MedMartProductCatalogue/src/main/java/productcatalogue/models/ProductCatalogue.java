@@ -20,6 +20,14 @@ public class ProductCatalogue {
 	private String doseStrength;
 	private String size;
 	
+	public String getProductId() {
+		return productId;
+	}
+
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+
 	public ProductCatalogue(@NotNull String productName, String doseStrength, String size, String companyName) {
 		this.productName = productName;
 		this.doseStrength = doseStrength;
