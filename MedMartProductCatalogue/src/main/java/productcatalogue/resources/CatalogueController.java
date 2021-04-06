@@ -16,7 +16,6 @@ import productcatalogue.models.ProductCatalogue;
 import productcatalogue.services.ProductCatalogueService;
 
 @RestController
-@Transactional
 @RequestMapping("/catalogue")
 public class CatalogueController {
 	@Autowired
