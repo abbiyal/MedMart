@@ -27,7 +27,7 @@ public class MedMartProductCatalogueApplication {
 	public Docket swaggerConfiguration() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				   .select()
-				   .paths(PathSelectors.ant("/carts/**")) // give controller path
+				   .paths(PathSelectors.ant("/catalogue/**")) // give controller path
 				   .apis(RequestHandlerSelectors.basePackage("productcatalogue"))
 				   .build()
 				   .apiInfo(apiDetails());

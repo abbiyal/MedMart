@@ -14,8 +14,40 @@ import javax.validation.constraints.NotNull;
 public class ProductCatalogue {
 	@Id
 	private String productId; /// company name, med name, Dosestrength, size
-	@NotNull
+//	@NotNull
 	private String productName;
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getDoseStrength() {
+		return doseStrength;
+	}
+
+	public void setDoseStrength(String doseStrength) {
+		this.doseStrength = doseStrength;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
 	private String companyName;
 	private String doseStrength;
 	private String size;
@@ -28,11 +60,15 @@ public class ProductCatalogue {
 		this.productId = productId;
 	}
 
-	public ProductCatalogue(@NotNull String productName, String doseStrength, String size, String companyName) {
-		this.productName = productName;
-		this.doseStrength = doseStrength;
-		this.size = size;
-		this.companyName = companyName;
+	public ProductCatalogue() {
+		
+	}
+	
+	public ProductCatalogue(ProductCatalogue product) {
+		this.productName = product.productName;
+		this.doseStrength = product.doseStrength;
+		this.size = product.size;
+		this.companyName = product.companyName;
 		this.productId = encryptThisString(productName + doseStrength + size + companyName);
 	}
 

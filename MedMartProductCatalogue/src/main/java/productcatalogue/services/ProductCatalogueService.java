@@ -16,13 +16,14 @@ public class ProductCatalogueService {
 	@Autowired
 	private CatalogueRepository catalogueRepository;
 	
-	public String registerNewProduct(String productName, String doseStrength, String size, String companyName) {
-		ProductCatalogue product = new ProductCatalogue(productName, doseStrength, size, companyName);
-		catalogueRepository.save(product);
-		return product.getProductId();
+	public String registerNewProduct(ProductCatalogue product) {
+		ProductCatalogue genproduct = new ProductCatalogue(product);
+		catalogueRepository.save(genproduct);
+		return genproduct.getProductId();
 	}
 	
 	public Optional<ProductCatalogue> getProductInfo(String productId) {
 		return catalogueRepository.findById(productId);
+		
 	}
 }
