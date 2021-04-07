@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class MedInventory {
@@ -25,27 +26,13 @@ public class MedInventory {
 	private double discount;
 	@NotNull
 	private int quantity;
-	
-	
-	
-	public MedInventory(String productId, String vendorId, long shopId, String type, double price,
-			double discount, int quantity) {
-		this.id = encryptThisString(productId + vendorId + price + discount);
-		this.productId = productId;
-		this.vendorId = vendorId;
-		this.shopId = shopId;
-		this.type = type;
-		this.price = price;
-		this.discount = discount;
-		this.quantity = quantity;
-	}
 
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setId() {
+		this.id = encryptThisString(productId + vendorId + price + discount);;
 	}
 
 	public String getProductId() {

@@ -56,20 +56,12 @@ public class ProductCatalogue {
 		return productId;
 	}
 
-	public void setProductId(String productId) {
-		this.productId = productId;
+	public void setProductId() {
+		this.productId = encryptThisString(productName + doseStrength + size + companyName);;
 	}
 
 	public ProductCatalogue() {
 		
-	}
-	
-	public ProductCatalogue(ProductCatalogue product) {
-		this.productName = product.productName;
-		this.doseStrength = product.doseStrength;
-		this.size = product.size;
-		this.companyName = product.companyName;
-		this.productId = encryptThisString(productName + doseStrength + size + companyName);
 	}
 
 	public static String encryptThisString(String input) 

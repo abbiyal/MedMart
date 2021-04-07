@@ -17,9 +17,9 @@ public class ProductCatalogueService {
 	private CatalogueRepository catalogueRepository;
 	
 	public String registerNewProduct(ProductCatalogue product) {
-		ProductCatalogue genproduct = new ProductCatalogue(product);
-		catalogueRepository.save(genproduct);
-		return genproduct.getProductId();
+		product.setProductId();
+		catalogueRepository.save(product);
+		return product.getProductId();
 	}
 	
 	public Optional<ProductCatalogue> getProductInfo(String productId) {
