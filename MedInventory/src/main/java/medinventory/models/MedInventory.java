@@ -32,7 +32,7 @@ public class MedInventory {
 	}
 
 	public void setId() {
-		this.id = encryptThisString(productId + vendorId + price + discount);;
+		this.id = encryptThisString(productId + vendorId + price);;
 	}
 
 	public String getProductId() {

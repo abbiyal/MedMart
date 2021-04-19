@@ -24,8 +24,7 @@ public class CatalogueController {
 	private ProductCatalogueService catalogueService;
 	
 	@RequestMapping(value="/{productId}",method=RequestMethod.GET)
-	public Optional<ProductCatalogue> getProduct(@PathVariable("productId") String productId,@RequestHeader(value="Authorization") String jwt){
-		System.out.println(jwt);
+	public Optional<ProductCatalogue> getProduct(@PathVariable("productId") String productId){
 		Optional<ProductCatalogue> product = catalogueService.getProductInfo(productId);
 		return product;
 	}
@@ -35,4 +34,11 @@ public class CatalogueController {
 		System.out.println(product.getProductName());
 		return catalogueService.registerNewProduct(product);
 	}
+	
+	@RequestMapping(value="/getKey",method=RequestMethod.POST)
+	public String getKey(@RequestBody ProductCatalogue product){
+		product.setProductId();
+		return product.getProductId();
+	}
+	
 }

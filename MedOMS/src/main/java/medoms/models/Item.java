@@ -81,9 +81,4 @@ public class Item {
 		return "Item [id=" + id + ", itemId=" + itemId + ", cart=" + cart + ", quantity=" + quantity + ", price="
 				+ price + ", name=" + name + ", imageUrl=" + imageUrl + "]";
 	}
-	
-	
-	
-	
-	
 }

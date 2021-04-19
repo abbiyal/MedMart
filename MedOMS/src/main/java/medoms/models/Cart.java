@@ -20,9 +20,9 @@ import javax.persistence.Table;
 
 import com.sun.istack.NotNull;
 
+
 public class Cart {
 	
-
 	private long id;
 	private String userId;
 	private String sessionId;
