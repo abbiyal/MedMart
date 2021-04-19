@@ -1,3 +1,4 @@
+  
 package productcatalogue.models;
 
 import java.math.BigInteger;
