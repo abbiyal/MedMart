@@ -1,6 +1,8 @@
 package medgateway.services;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -55,6 +57,19 @@ public class UserService implements UserDetailsService{
          
         user.setResetToken(null);
         userRepository.save(user);
+    }
+    
+    public HashMap<String,String> addUser(Users user){
+    	int strength=10;
+		BCryptPasswordEncoder bCryptPasswordEncoder =
+				  new BCryptPasswordEncoder(strength, new SecureRandom());
+		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+		System.out.println(user);
+		user.setPassword(encodedPassword);
+		userRepository.save(user);
+		HashMap<String, String> map = new HashMap<>();
+		map.put("response","success");
+		return map;
     }
 
 }

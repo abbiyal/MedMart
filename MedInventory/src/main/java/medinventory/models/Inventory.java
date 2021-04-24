@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class MedInventory {
+public class Inventory {
 	@Id
 	private String id;
 	@NotNull
@@ -91,7 +91,7 @@ public class MedInventory {
 		this.quantity = quantity;
 	}
 
-	public MedInventory() {
+	public Inventory() {
 		
 	}
 

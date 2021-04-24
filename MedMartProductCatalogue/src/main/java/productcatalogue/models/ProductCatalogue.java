@@ -17,6 +17,12 @@ public class ProductCatalogue {
 	private String productId; /// company name, med name, Dosestrength, size
 //	@NotNull
 	private String productName;
+	
+
+	private String companyName;
+	private String doseStrength;
+	private String size;
+	
 	public String getProductName() {
 		return productName;
 	}
@@ -48,10 +54,6 @@ public class ProductCatalogue {
 	public void setSize(String size) {
 		this.size = size;
 	}
-
-	private String companyName;
-	private String doseStrength;
-	private String size;
 	
 	public String getProductId() {
 		return productId;

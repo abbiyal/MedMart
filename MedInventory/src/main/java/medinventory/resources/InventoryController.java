@@ -9,11 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import medinventory.models.MedInventory;
+import medinventory.models.Inventory;
 import medinventory.services.MedInventoryService;
-
-
-
 
 @RestController
 @Transactional
@@ -24,13 +21,13 @@ public class InventoryController {
 	private MedInventoryService inventoryService;
 	
 	@RequestMapping(value="/addInventory",method=RequestMethod.POST)
-	public String addInventory(@RequestBody MedInventory record){
+	public String addInventory(@RequestBody Inventory record){
 		inventoryService.addRecord(record);
 		return "Success";
 	}
 	
 	@RequestMapping(value="/getKey",method=RequestMethod.POST)
-	public String getKey(@RequestBody MedInventory record){
+	public String getKey(@RequestBody Inventory record){
 		record.setId();
 		return record.getId();
 	}

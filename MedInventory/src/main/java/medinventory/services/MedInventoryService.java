@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import medinventory.models.InventoryRepository;
-import medinventory.models.MedInventory;
+import medinventory.jparepositories.InventoryRepository;
+import medinventory.models.Inventory;
 
 @Service
 public class MedInventoryService {
@@ -13,14 +13,14 @@ public class MedInventoryService {
 	@Autowired
 	private InventoryRepository inventoryRepository;
 	
-	public String addRecord(MedInventory record) {
+	public String addRecord(Inventory record) {
 			record.setId();
 			inventoryRepository.save(record);
 			return "success";
 	}
 	
 	public String updateRecord(String id, int quantityChange) {
-		Optional<MedInventory> record = inventoryRepository.findById(id);
+		Optional<Inventory> record = inventoryRepository.findById(id);
 		
 		if (record.isPresent()) {
 			if (record.get().getQuantity()+quantityChange < 0) {

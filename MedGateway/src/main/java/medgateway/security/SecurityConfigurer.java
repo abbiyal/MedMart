@@ -58,8 +58,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
-			.authorizeRequests().antMatchers("/api/login","/","/api/signup","/v2/api-docs","/swagger*/**","/webjars/**",
-					"/api/forgotsendtoken","/api/verifytoken").permitAll()
+			.authorizeRequests().antMatchers("/api/login","/","/api/signup","/v2/api-docs",
+								"/swagger*/**","/webjars/**","/api/forgot/**").permitAll()
 			.anyRequest().authenticated()
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
