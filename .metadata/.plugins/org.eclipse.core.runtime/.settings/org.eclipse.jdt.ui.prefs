@@ -1,7 +1,7 @@
 content_assist_add_import=true
 content_assist_autoactivation=true
 content_assist_autoactivation_delay=0
-content_assist_autoactivation_triggers_java=.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+content_assist_autoactivation_triggers_java=.
 content_assist_autoactivation_triggers_javadoc=@\#
 content_assist_autoinsert=true
 content_assist_case_sensitivity=false
@@ -12,7 +12,7 @@ content_assist_disabled_computers=org.eclipse.jdt.ui.textProposalCategory\u0000o
 content_assist_fill_method_arguments=true
 content_assist_guess_method_arguments=false
 content_assist_insert_completion=true
-content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="java.lang.Enum"><rhs name\="javax.persistence.CascadeType"/><rhs name\="javax.persistence.FetchType"/></lhs><lhs name\="org.springframework.plugin.metadata.SimplePluginMetadata"><rhs name\="springfox.documentation.spi.DocumentationType"/></lhs><lhs name\="org.springframework.plugin.metadata.PluginMetadata"><rhs name\="springfox.documentation.spi.DocumentationType"/></lhs><lhs name\="springfox.documentation.spi.DocumentationType"><rhs name\="springfox.documentation.spi.DocumentationType"/></lhs><lhs name\="org.springframework.data.elasticsearch.core.query.Query"><rhs name\="org.springframework.data.elasticsearch.core.query.NativeSearchQuery"/></lhs></history>
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="java.lang.Enum"><rhs name\="javax.persistence.CascadeType"/><rhs name\="javax.persistence.FetchType"/><rhs name\="org.springframework.data.elasticsearch.annotations.FieldType"/></lhs><lhs name\="org.springframework.plugin.metadata.SimplePluginMetadata"><rhs name\="springfox.documentation.spi.DocumentationType"/></lhs><lhs name\="org.springframework.plugin.metadata.PluginMetadata"><rhs name\="springfox.documentation.spi.DocumentationType"/></lhs><lhs name\="springfox.documentation.spi.DocumentationType"><rhs name\="springfox.documentation.spi.DocumentationType"/></lhs><lhs name\="org.springframework.data.elasticsearch.core.query.Query"><rhs name\="org.springframework.data.elasticsearch.core.query.NativeSearchQuery"/></lhs></history>
 content_assist_number_of_computers=22
 content_assist_parameters_background=48,54,59
 content_assist_parameters_foreground=235,237,239

@@ -8,15 +8,20 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
 @Entity
+@Document(indexName = "Inventory")
 public class Inventory {
 	@Id
+	@org.springframework.data.annotation.Id
 	private String id;
 	@NotNull
 	private String productId;
 	@NotNull
-	private String vendorId;
-	@NotNull
+	@Field(type = FieldType.Long, name="ShopId")
 	private long shopId;
 	@NotNull
 	private String type;
@@ -32,7 +37,7 @@ public class Inventory {
 	}
 
 	public void setId() {
-		this.id = encryptThisString(productId + vendorId + price);;
+		this.id = encryptThisString(productId + shopId + price);;
 	}
 
 	public String getProductId() {
@@ -41,14 +46,6 @@ public class Inventory {
 
 	public void setProductId(String productId) {
 		this.productId = productId;
-	}
-
-	public String getVendorId() {
-		return vendorId;
-	}
-
-	public void setVendorId(String vendorId) {
-		this.vendorId = vendorId;
 	}
 
 	public long getShopId() {

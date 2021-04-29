@@ -33,8 +33,20 @@ public class ProductCatalogue {
 	private String productName;
 	private String companyName;
 	private String doseStrength;
-	private String size;
+	private String size; 
+	@Field(type=FieldType.Text,analyzer="autocomplete",name="category")
+	private String type;
 	
+	
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public String getProductName() {
 		return productName;
 	}
@@ -72,7 +84,7 @@ public class ProductCatalogue {
 	}
 
 	public void setProductId() {
-		this.productId = encryptThisString(productName + doseStrength + size + companyName);;
+		this.productId = encryptThisString(productName + doseStrength + size + companyName+type);;
 	}
 
 	public ProductCatalogue() {

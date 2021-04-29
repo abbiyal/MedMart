@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import com.mysql.cj.protocol.AuthenticationProvider;
 
 import medgateway.filters.JwtRequestFilter;
+import medgateway.filters.RestEntryPoint;
 import medgateway.services.UserService;
 
 @EnableWebSecurity
@@ -62,7 +63,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 								"/swagger*/**","/webjars/**","/api/forgot/**").permitAll()
 			.anyRequest().authenticated()
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			
+			
+		http.exceptionHandling().authenticationEntryPoint(new RestEntryPoint());
 	    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+	    
 	}
 
 }

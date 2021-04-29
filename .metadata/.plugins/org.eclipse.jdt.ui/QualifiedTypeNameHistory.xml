@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="net.bytebuddy.utility.RandomString"/>
-<fullyQualifiedTypeName name="java.util.Random"/>
-<fullyQualifiedTypeName name="com.sun.mail.imap.Utility"/>
-<fullyQualifiedTypeName name="java.io.UnsupportedEncodingException"/>
-<fullyQualifiedTypeName name="javax.mail.MessagingException"/>
 <fullyQualifiedTypeName name="org.springframework.security.core.userdetails.UsernameNotFoundException"/>
 <fullyQualifiedTypeName name="javax.mail.internet.MimeMessage"/>
 <fullyQualifiedTypeName name="org.springframework.mail.javamail.MimeMessageHelper"/>
@@ -44,7 +39,6 @@
 <fullyQualifiedTypeName name="org.springframework.data.repository.CrudRepository"/>
 <fullyQualifiedTypeName name="medinventory.models.Inventory"/>
 <fullyQualifiedTypeName name="java.util.Collections"/>
-<fullyQualifiedTypeName name="java.lang.String"/>
 <fullyQualifiedTypeName name="org.elasticsearch.index.query.QueryBuilder"/>
 <fullyQualifiedTypeName name="org.elasticsearch.common.unit.Fuzziness"/>
 <fullyQualifiedTypeName name="org.springframework.data.elasticsearch.core.query.Query"/>
@@ -60,4 +54,10 @@
 <fullyQualifiedTypeName name="org.apache.lucene.util.automaton.LimitedFiniteStringsIterator"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="medinventory.models.ProductCatalogue"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="org.springframework.data.elasticsearch.annotations.Field"/>
+<fullyQualifiedTypeName name="org.springframework.data.elasticsearch.annotations.FieldType"/>
+<fullyQualifiedTypeName name="io.jsonwebtoken.JwtException"/>
+<fullyQualifiedTypeName name="medgateway.filters.RestEntryPoint"/>
+<fullyQualifiedTypeName name="org.springframework.security.web.AuthenticationEntryPoint"/>
 </qualifiedTypeNameHistroy>
