@@ -34,7 +34,6 @@ public class ProductCatalogue {
 	private String companyName;
 	private String doseStrength;
 	private String size; 
-	@Field(type=FieldType.Text,analyzer="autocomplete",name="category")
 	private String type;
 	
 	

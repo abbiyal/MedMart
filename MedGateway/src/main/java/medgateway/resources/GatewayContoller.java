@@ -115,5 +115,19 @@ public class GatewayContoller {
 		return map;
 		
 	}
-		
+	
+	@RequestMapping(value="/profile/updatePassword",method=RequestMethod.GET)
+	public HashMap<String,String> updatePasswordProfile(@RequestBody HashMap<String,String> request){
+		UserDetails userpassword = userDetailsService.loadUserByUsername(request.get("username"));
+		Optional<Users> user=userRepository.findById(request.get("username"));
+		Users newUser = user.get();
+		HashMap<String,String> response = new HashMap<String,String>();
+		if(userpassword.getPassword().contentEquals(request.get("oldpassword"))) {
+			userDetailsService.updatePassword(newUser,request.get("newpassword"));
+			response.put("repsonse","success");
+			return response;
+		}
+		response.put("response","failure");
+		return response;
 	}
+}

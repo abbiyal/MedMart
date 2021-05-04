@@ -1,47 +1,59 @@
 package medinventory.models;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.GeoPointField;
 
 @Entity
-@Document(indexName = "Shops")
+@Document(indexName = "shops")
 public class Shops {
 
 	@Id
 	@org.springframework.data.annotation.Id
-	public long shopId;
-	public long vendorId;
-	public String address;
-	public String city;
-	public Double longitude;
-	public Double latitude;
-
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long shopId;
+	private Long vendorId;
+	private String address;
+	private String city;
+	@GeoPointField
+	private String location;
+	String shopName;
+	
+	
 	public Shops() {
-		
+		super();
 	}
 
-	public Shops(long shopId, long vendorId, String address, String city, Double longitude, Double latitude) {
+	
+	
+	public Shops(Long shopId, Long vendorId, String address, String city, String location, String shopName) {
 		super();
 		this.shopId = shopId;
 		this.vendorId = vendorId;
 		this.address = address;
 		this.city = city;
-		this.longitude = longitude;
-		this.latitude = latitude;
+		this.location = location;
+		this.shopName = shopName;
 	}
-	
-	public long getShopId() {
+
+
+
+	public Long getShopId() {
 		return shopId;
 	}
-	public void setShopId(long shopId) {
+	public void setShopId(Long shopId) {
 		this.shopId = shopId;
 	}
-	public long getVendorId() {
+	public Long getVendorId() {
 		return vendorId;
 	}
-	public void setVendorId(long vendorId) {
+	public void setVendorId(Long vendorId) {
 		this.vendorId = vendorId;
 	}
 	public String getAddress() {
@@ -56,18 +68,21 @@ public class Shops {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public Double getLongitude() {
-		return longitude;
+	public String getLocation() {
+		return location;
 	}
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
+	public void setLocation(String location) {
+		this.location = location;
 	}
-	public Double getLatitude() {
-		return latitude;
+
+	public String getShopName() {
+		return shopName;
 	}
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
 	}
+	
 	
 	
 	

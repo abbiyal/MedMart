@@ -20,6 +20,7 @@ public class InventoryController {
 	@Autowired
 	private MedInventoryService inventoryService;
 	
+	
 	@RequestMapping(value="/addInventory",method=RequestMethod.POST)
 	public String addInventory(@RequestBody Inventory record){
 		inventoryService.addRecord(record);

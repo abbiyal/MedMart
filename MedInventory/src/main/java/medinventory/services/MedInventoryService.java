@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import medinventory.elasticrepositories.InventoryElasticRepository;
 import medinventory.jparepositories.InventoryRepository;
 import medinventory.models.Inventory;
 
@@ -13,9 +15,14 @@ public class MedInventoryService {
 	@Autowired
 	private InventoryRepository inventoryRepository;
 	
+	@Autowired
+	private InventoryElasticRepository inventoryElasticRepository;
+	
 	public String addRecord(Inventory record) {
 			record.setId();
+			System.out.println("in inventory");
 			inventoryRepository.save(record);
+			inventoryElasticRepository.save(record);
 			return "success";
 	}
 	

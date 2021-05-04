@@ -1,5 +1,6 @@
 package medinventory.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,14 +16,13 @@ import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.search.MatchQuery;
-
+import org.elasticsearch.search.SearchHit;
 import org.hibernate.Criteria;
 import org.json.JSONArray;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
@@ -35,7 +35,9 @@ import com.mysql.cj.xdevapi.JsonArray;
 import medinventory.elasticrepositories.InventoryElasticRepository;
 import medinventory.elasticrepositories.ProductRepository;
 import medinventory.elasticrepositories.ShopsElasticRepository;
+import medinventory.mapsapi.DistanceTime;
 import medinventory.models.Inventory;
+import medinventory.models.NearbyShopResponse;
 import medinventory.models.ProductCatalogue;
 import medinventory.models.Shops;
 
@@ -50,9 +52,7 @@ public class SearchService {
 	
 	@Autowired
 	ShopsElasticRepository shopElasticRepository;
-	
-	private Double currLat;
-	private Double currLong;
+
 	
 	public List<ProductCatalogue> findbyKeyword(String keyword){
 		Iterable<ProductCatalogue> products=productElasticRepository.findByProductName(keyword);
@@ -78,54 +78,82 @@ public class SearchService {
 		return products;
 	}
 	
-	public List<Shops> findShops(String productId){
-		Iterable<Inventory> inventoryProducts = inventoryElasticRepository.findByProductId(productId);
+	public List<NearbyShopResponse> getShopsWithDistance(String source,List<Shops> shops){
+		DistanceTime distancerequest = new DistanceTime();
+		List<NearbyShopResponse> nearbytopShops = new ArrayList<NearbyShopResponse>();
+		for(int i=0;i<shops.size();i++) {
+			String destination = shops.get(i).getLocation();
+			String responseJson = "";
+			try {
+				responseJson = distancerequest.calculate(source,destination);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Shops currShop = shops.get(i);
+			NearbyShopResponse obj = new NearbyShopResponse(currShop.getShopName(),
+					currShop.getShopId(),responseJson, "");
+			nearbytopShops.add(obj);
+		}
+		return nearbytopShops;
+	}
+	
+	Comparator<NearbyShopResponse> compareByDistance = new Comparator<NearbyShopResponse>() {
+	   
+
+		@Override
+		public int compare(NearbyShopResponse o1, NearbyShopResponse o2) {
+			// TODO Auto-generated method stub
+			Double distance1=Double.parseDouble(o1.getDistance().substring(0, o1.getDistance().length()-2));
+			Double distance2=Double.parseDouble(o2.getDistance().substring(0, o2.getDistance().length()-2));
+			if(distance1>=distance2) {
+				return 1;
+			}
+			return -1;
+		}
+	};
+	
+	public List<NearbyShopResponse> findShopsHavingProducts(String productId,String location){
+		Iterable<Inventory> inventoryProducts = inventoryElasticRepository.findByProductIdAndQuantityGreaterThan(productId,1);
 		List<Long> shopIds = new ArrayList<Long>();
 		inventoryProducts.forEach(new Consumer<Inventory>() {
-			
 			@Override
             public void accept(Inventory t)
             {
-  
                 shopIds.add(t.getShopId());
             }
 		});
+		System.out.println("got shops");
 		JSONArray shopIdsArray = new JSONArray(shopIds);
-		List<Shops> shops = shopElasticRepository.searchShops(shopIdsArray);
-		return shops;
+		List<Shops> shops = shopElasticRepository.searchShops(shopIdsArray,location);
+		shops.subList(0, Math.min(25,shops.size()));
+		List<NearbyShopResponse> topMatchingShops = getShopsWithDistance(location,shops);
+		Collections.sort(topMatchingShops, compareByDistance);
+		for(int i=0;i<topMatchingShops.size();i++) {
+			Long shopid = topMatchingShops.get(i).getShopId();
+			List<Inventory> inv = inventoryElasticRepository.findByProductIdAndShopId(productId, shopid);
+			Double price = 50000000.00;
+			for(int j=0;j<inv.size();j++) {
+				price = Math.min(inv.get(j).getPrice(), price);
+				
+			}
+			topMatchingShops.get(i).setPrice(String.valueOf(price));
+		}
+		return topMatchingShops;
 	}
 	
-	public double distance(double fromLat, double fromLon, double toLat, double toLon) {
-        double radius = 6378137;   // approximate Earth radius, *in meters*
-        double deltaLat = toLat - fromLat;
-        double deltaLon = toLon - fromLon;
-        double angle = 2 * Math.asin( Math.sqrt(
-                Math.pow(Math.sin(deltaLat/2), 2) +
-                        Math.cos(fromLat) * Math.cos(toLat) *
-                                Math.pow(Math.sin(deltaLon/2), 2) ) );
-        return radius * angle;
-    }
+	public List<NearbyShopResponse> findNearbyShops(String location){
+		String source = location;
+		List<Shops> nearbyShops = shopElasticRepository.findNearbyShops(location);
+		List<Shops> topShops = nearbyShops.subList(0, Math.min(10,nearbyShops.size()));
+		List<NearbyShopResponse> nearbytopShops = getShopsWithDistance(location,topShops);
+		Collections.sort(nearbytopShops,compareByDistance);
+		return nearbytopShops;
+	}
 	
-	public List<Shops> findNearbyShops(String latitude,String longitude,String city){
-		List<Shops> nearbyShops = shopElasticRepository.findShopsByCity(city);
-		currLat=Double.parseDouble(latitude);
-		currLong=Double.parseDouble(longitude);
-		Comparator<Shops> compareById = new Comparator<Shops>() {
-		    @Override
-		    public int compare(Shops s1, Shops s2) {
-		        double lat1=s1.getLatitude();
-		        double long1=s1.getLongitude();
-		        double lat2=s2.getLatitude();
-		        double long2=s2.getLongitude();
-		        
-		        double distanceToPlace1 = distance(currLat, currLong, lat1, long1);
-		        double distanceToPlace2 = distance(currLat, currLong, lat2, long2);
-		        return (int) (distanceToPlace1 - distanceToPlace2);
-		      
-		    }
-		};
-		Collections.sort(nearbyShops, compareById);
-		return nearbyShops;
+	public List<ProductCatalogue> findProductsWithCategory(String category){
+		category = "\"" + category +"\"";
+		List<ProductCatalogue> productsOfGivenCategory = productElasticRepository.findByType(category);
+		return productsOfGivenCategory;
 	}
 	
 }

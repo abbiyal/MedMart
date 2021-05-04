@@ -11,9 +11,11 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Setting;
 
 @Entity
-@Document(indexName = "Inventory")
+@Document(indexName = "inventory")
+@Setting(settingPath = "/autocomplete.json")
 public class Inventory {
 	@Id
 	@org.springframework.data.annotation.Id
@@ -24,7 +26,8 @@ public class Inventory {
 	@Field(type = FieldType.Long, name="ShopId")
 	private long shopId;
 	@NotNull
-	private String type;
+	@Field(type=FieldType.Text,analyzer="autocomplete",name="productname")
+	private String productname;
 	@NotNull
 	private double price;
 	@NotNull
@@ -56,12 +59,14 @@ public class Inventory {
 		this.shopId = shopId;
 	}
 
-	public String getType() {
-		return type;
+	
+
+	public String getProductname() {
+		return productname;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setProductname(String productname) {
+		this.productname = productname;
 	}
 
 	public double getPrice() {

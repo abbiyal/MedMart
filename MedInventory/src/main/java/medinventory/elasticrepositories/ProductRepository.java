@@ -19,5 +19,8 @@ public interface ProductRepository extends ElasticsearchRepository<ProductCatalo
 	
 	@Query("{\"bool\": {\"must\": {\"terms\": {\"productId\":?0}}}}")
 	List<ProductCatalogue> searchShopProducts(JSONArray keyword);
+	
+	
+	List<ProductCatalogue> findByType(String category);
 
 }
