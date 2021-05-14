@@ -26,7 +26,7 @@ public interface ShopsElasticRepository extends ElasticsearchRepository<Shops, L
 			"      ],\r\n" + 
 			"      \"filter\": {\r\n" + 
 			"        \"geo_distance\": {\r\n" + 
-			"          \"distance\": \"25km\",\r\n" + 
+			"          \"distance\": \"15km\",\r\n" + 
 			"          \"location\":  ?1  \r\n" + 
 			"        }\r\n" + 
 			"      }\r\n" + 

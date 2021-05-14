@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -61,7 +62,7 @@ public class SearchService {
 		return productMatches;
 	}
 	
-	public List<ProductCatalogue> findProductsInShop(Long shopId){
+	public List<HashMap<String,String>> findProductsInShop(Long shopId){
 		Iterable<Inventory> inventoryProducts = inventoryElasticRepository.findByShopId(shopId);
 		List<String> productIds = new ArrayList<String>();
 		inventoryProducts.forEach(new Consumer<Inventory>() {
@@ -74,8 +75,33 @@ public class SearchService {
             }
 		});
 		JSONArray productIdsArray = new JSONArray(productIds);
+		ArrayList response = new ArrayList<HashMap<String,String>>();
 		List<ProductCatalogue> products = productElasticRepository.searchShopProducts(productIdsArray);
-		return products;
+		for(int i = 0;i<products.size();i++) {
+			HashMap<String,String> map = new HashMap<String,String>();
+			String productId = products.get(i).getProductId();
+			Iterable<Inventory> product = inventoryElasticRepository
+					.findByProductIdAndQuantityGreaterThan(productId,1);
+			
+			product.forEach(new Consumer<Inventory>() {
+			
+			@Override
+            public void accept(Inventory t)
+            {
+  
+				map.put("price", String.valueOf((t.getPrice())));
+            }
+		});
+			map.put("id", products.get(i).getProductId());
+			map.put("companyName", products.get(i).getCompanyName());
+			map.put("doseStrength", products.get(i).getDoseStrength());
+			map.put("productName", products.get(i).getProductName());
+			map.put("size", products.get(i).getSize());
+			map.put("type", products.get(i).getType());
+			
+			response.add(map);
+		}
+		return response;
 	}
 	
 	public List<NearbyShopResponse> getShopsWithDistance(String source,List<Shops> shops){
@@ -91,7 +117,7 @@ public class SearchService {
 			}
 			Shops currShop = shops.get(i);
 			NearbyShopResponse obj = new NearbyShopResponse(currShop.getShopName(),
-					currShop.getShopId(),responseJson, "");
+					currShop.getShopId(),responseJson, "",currShop.getAddress());
 			nearbytopShops.add(obj);
 		}
 		return nearbytopShops;
@@ -151,9 +177,40 @@ public class SearchService {
 	}
 	
 	public List<ProductCatalogue> findProductsWithCategory(String category){
+
 		category = "\"" + category +"\"";
 		List<ProductCatalogue> productsOfGivenCategory = productElasticRepository.findByType(category);
 		return productsOfGivenCategory;
 	}
 	
+	public List<ProductCatalogue> findProductsWithinCategory(String category,String keyword){
+		List<ProductCatalogue> products = productElasticRepository.findByTypeAndProductName(category,keyword);
+		return products;
+	}
+
+	public List<ProductCatalogue> searchProductsWithinShop(String category,Long shopId,String keyword){
+		Iterable<Inventory> inventoryProducts = inventoryElasticRepository.findByShopId(shopId);
+		List<String> productIds = new ArrayList<String>();
+		inventoryProducts.forEach(new Consumer<Inventory>() {
+			
+			@Override
+            public void accept(Inventory t)
+            {
+  
+                productIds.add(t.getProductId());
+            }
+		});
+		JSONArray productIdsArray = new JSONArray(productIds);
+		if(category.contentEquals("All")) {
+			List<ProductCatalogue> products = productElasticRepository
+					.searchShopProductsWithKeyword(productIdsArray,keyword);
+			return products;
+			
+		}
+		List<ProductCatalogue> products = productElasticRepository
+				.searchShopProductsWithKeywordAndCategory(productIdsArray,keyword,category);
+		return products;
+		
+	}
+
 }

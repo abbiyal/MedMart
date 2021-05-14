@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,12 @@ public class UserService implements UserDetailsService{
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -51,25 +58,71 @@ public class UserService implements UserDetailsService{
     }
      
     public void updatePassword(Users user, String newPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
-         
         user.setResetToken(null);
         userRepository.save(user);
     }
     
     public HashMap<String,String> addUser(Users user){
+    	Optional<Users> alreadyexistuser = userRepository.findById(user.getUsername());
     	int strength=10;
-		BCryptPasswordEncoder bCryptPasswordEncoder =
-				  new BCryptPasswordEncoder(strength, new SecureRandom());
-		String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+    	HashMap<String, String> map = new HashMap<>();
+    	if(alreadyexistuser.isPresent()) {
+    		map.put("response","already exist");
+    		return map;
+    	}
+		String encodedPassword = passwordEncoder.encode(user.getPassword());
 		System.out.println(user);
 		user.setPassword(encodedPassword);
 		userRepository.save(user);
-		HashMap<String, String> map = new HashMap<>();
-		map.put("response","success");
+		HashMap<String,String> tokensent = emailService.sendtoken(user.getUsername());
+		if(tokensent.get("response").contentEquals("success")) {
+			map.put("response", "success");
+		}else {
+			userRepository.deleteById(user.getUsername());
+			map.put("response","failure");
+		}
 		return map;
+    }
+
+    public  HashMap<String,String> deleteUser(String email){
+    	System.out.println("hello");
+    	HashMap<String,String> map = new HashMap<String,String>();
+    	try {
+    		userRepository.deleteById(email);
+    		map.put("response", "success");
+    	}catch(Exception e) {
+    		map.put("response", "failure");
+    	}
+    	return map;
+    }
+    
+    public  HashMap<String,String> updatePhone(String email,String phoneno){
+    	Optional<Users> user = userRepository.findById(email);
+    	HashMap<String,String> map = new HashMap<String,String>();
+    	if(user.get() == null)
+    		map.put("response","no user found");
+    	else {
+    		user.get().setPhone(phoneno);
+    		userRepository.save(user.get());
+    		map.put("response","success");
+    	}
+    	return map;
+    		
+    }
+
+    public HashMap<String,String> updateName(String email,String name){
+    	Optional<Users> user = userRepository.findById(email);
+    	HashMap<String,String> map = new HashMap<String,String>();
+    	if(user.get() == null)
+    		map.put("response","no user found");
+    	else {
+    		user.get().setName(name);
+    		userRepository.save(user.get());
+    		map.put("response","success");
+    	}
+    	return map;
     }
 
 }

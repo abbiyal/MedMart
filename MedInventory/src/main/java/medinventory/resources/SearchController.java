@@ -39,9 +39,10 @@ public class SearchController {
 	}
 	
 	@RequestMapping("/search/products_in_shop")
-	public List<ProductCatalogue> findShopProducts(@RequestParam(name="keyword") String keyword){
-		Long shopId=Long.parseLong(keyword);
-		List<ProductCatalogue> shopInventoryList = productSearchService.findProductsInShop(shopId);
+	public List<HashMap<String,String>> findShopProducts(@RequestParam(name="shopid") String shopid){
+		Long shopId=Long.parseLong(shopid);
+		System.out.println(shopId);
+		List<HashMap<String,String>> shopInventoryList = productSearchService.findProductsInShop(shopId);
 		return shopInventoryList;
 	}
 	
@@ -66,5 +67,15 @@ public class SearchController {
 	public List<ProductCatalogue> findProductsWithCategory(@RequestParam(name = "category") String category){
 		List<ProductCatalogue> productsOfGivenCategory = productSearchService.findProductsWithCategory(category);
 		return productsOfGivenCategory;
+	}
+
+	
+	@RequestMapping(value = "/search/withincategory", method = RequestMethod.POST)
+	public List<ProductCatalogue> findProductsWithinCategory(@RequestBody HashMap<String,String> request){
+		String category = request.get("category");
+		String keyword = request.get("query");
+		List<ProductCatalogue> products = productSearchService.findProductsWithinCategory(category,keyword);
+		return products;
+		
 	}
 }

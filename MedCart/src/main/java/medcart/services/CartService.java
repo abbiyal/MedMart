@@ -23,7 +23,7 @@ public class CartService {
 	
 	public String createNewCart(String userId)
 	{
-		Cart cart=new Cart(userId,"session1","NEW",0);
+		Cart cart=new Cart(userId,"NEW",0.00,0, null);
 		cartRepository.save(cart);
 		return "success";
 	}	

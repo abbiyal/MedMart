@@ -17,11 +17,11 @@ public interface ItemRepository extends CrudRepository<Item,Long>{
 	
 	@Transactional
 	@Modifying
-	@Query("DELETE FROM Item i WHERE i.cart.id=:cartId AND i.itemId=:itemId")
-	public void deleteItemCart(@Param("cartId") long cartId,@Param("itemId") long itemId);
+	@Query("DELETE FROM Item i WHERE i.cart.id=:cartId AND i.productId=:productId")
+	public void deleteItemCart(@Param("cartId") long cartId,@Param("productId") String productId);
 	
-	@Query("Select i from Item i Where i.cart.id=:cartId AND i.itemId=:itemId")
-	public Optional<Item> findItemByItemandCartId(@Param("cartId") long cartId,@Param("itemId") long itemId);
+	@Query("Select i from Item i Where i.cart.id=:cartId AND i.productId=:productId")
+	public Optional<Item> findItemByItemandCartId(@Param("cartId") long cartId,@Param("productId") String productId);
 	
 	
 }

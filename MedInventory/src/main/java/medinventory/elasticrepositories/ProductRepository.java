@@ -22,5 +22,57 @@ public interface ProductRepository extends ElasticsearchRepository<ProductCatalo
 	
 	
 	List<ProductCatalogue> findByType(String category);
+	List<ProductCatalogue> findByTypeAndProductName(String category,String keyword);
+	
+	
+	@Query("{\r\n" + 
+			"  \"query\": {\r\n" + 
+			"    \"bool\": {\r\n" + 
+			"      \"must\": [\r\n" + 
+			"        {\r\n" + 
+			"          \"terms\": {\r\n" + 
+			"          \"productId\": ?0\r\n" + 
+			"          }\r\n" + 
+			"        },\r\n" + 
+			"        {\r\n" + 
+			"          \"match\": {\r\n" + 
+			"            \"productname\": ?1 \r\n" + 
+			"          }\r\n" + 
+			"        }\r\n" + 
+			"        \r\n" + 
+			"      ]\r\n" + 
+			"    }\r\n" + 
+			"    \r\n" + 
+			"  }\r\n" + 
+			"}")
+	List<ProductCatalogue> searchShopProductsWithKeyword(JSONArray productsIds,String keyword);
+	
+	@Query("{\r\n" + 
+			"  \"query\": {\r\n" + 
+			"    \"bool\": {\r\n" + 
+			"      \"must\": [\r\n" + 
+			"        {\r\n" + 
+			"          \"terms\": {\r\n" + 
+			"          \"productId\": ?0\r\n" + 
+			"          }\r\n" + 
+			"        },\r\n" + 
+			"        {\r\n" + 
+			"          \"match\": {\r\n" + 
+			"            \"type\": ?2\r\n" + 
+			"          }\r\n" + 
+			"        },\r\n" + 
+			"        {\r\n" + 
+			"          \"match\": {\r\n" + 
+			"            \"productname\": ?1\r\n" + 
+			"          }\r\n" + 
+			"        }\r\n" + 
+			"        \r\n" + 
+			"      ]\r\n" + 
+			"    }\r\n" + 
+			"    \r\n" + 
+			"  }\r\n" + 
+			"}")
+	List<ProductCatalogue> searchShopProductsWithKeywordAndCategory(JSONArray productsIds,
+			String keyword,String category);
 
 }

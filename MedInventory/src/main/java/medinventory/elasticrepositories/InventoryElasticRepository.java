@@ -1,6 +1,7 @@
 package medinventory.elasticrepositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
@@ -11,4 +12,6 @@ public interface InventoryElasticRepository extends ElasticsearchRepository<Inve
 	Iterable<Inventory> findByShopId(Long shopId);
 	Iterable<Inventory> findByProductIdAndQuantityGreaterThan(String productid,int quantity);
 	List<Inventory> findByProductIdAndShopId(String productid,Long shopId);
+	
+	
 }

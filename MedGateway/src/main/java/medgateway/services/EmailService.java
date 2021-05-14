@@ -30,6 +30,7 @@ public class EmailService {
     private JavaMailSender mailSender;
 	
 	public HashMap<String,String> sendtoken(String email){
+		System.out.println(email);
 		Random random = new Random();
 		int otp = 100000 + random.nextInt(900000);
 		String token=Integer.toString(otp);
@@ -56,7 +57,7 @@ public class EmailService {
 	    MimeMessage message =mailSender.createMimeMessage();             
 	    MimeMessageHelper helper = new MimeMessageHelper(message);
 	     
-	    helper.setFrom("medmartowner@gmail.com", "MEdmart Support");
+	    helper.setFrom("medmartowner@gmail.com", "Medmart Support");
 	    helper.setTo(recipientEmail);
 	     
 	    String subject = "Here's the OTP to reset your password";
