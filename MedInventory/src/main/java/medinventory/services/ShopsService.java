@@ -1,5 +1,6 @@
 package medinventory.services;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,18 @@ public class ShopsService {
 			return "Error";
 		}
 		return "success";
+	}
+	
+	public HashMap<String,String> findShop(Long shopId){
+		HashMap<String,String> response = new HashMap<String,String>();
+		Optional<Shops> shop = shopsElasticRepository.findById(shopId);
+		if(shop.isPresent()) {
+			response.put("shopName", shop.get().getShopName());
+			response.put("shopAddress",shop.get().getAddress());
+			return response;
+		}
+		response.put("response","error");
+		return response;
 	}
 	
 

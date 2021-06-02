@@ -88,7 +88,7 @@ public class cartController {
 	}
 	
 	@RequestMapping(value="/deleteIteminCart",method=RequestMethod.DELETE)
-	public String deleteItemCart(@RequestParam(name = "userId") String userId,
+	public HashMap<String,String> deleteItemCart(@RequestParam(name = "userId") String userId,
 			@RequestParam(name = "productId") String productId)
 	{
 		HashMap<String,String> cartPresent = addNewCart(userId);
@@ -102,7 +102,9 @@ public class cartController {
 		cart.setValue(cart.getValue()-value);
 		cart.setTotalItems(cart.getTotalItems()-itemQuantity);
 		cartService.updateCart(cart);
-		return "success";
+		HashMap<String,String> response = new HashMap<String,String>();
+		response.put("response","success");
+		return response;
 	}
 	
 	@RequestMapping(value="/addIteminCart",method=RequestMethod.POST,
@@ -115,6 +117,7 @@ public class cartController {
 		String price = request.get("price");
 		String productName= request.get("productName");
 		Long shopId = Long.parseLong(request.get("shopId"));
+		HashMap<String,String> response = new HashMap<String,String>();
 		HashMap<String,String> cartPresent = addNewCart(userId);
 		Item item = new Item(productId,Integer.parseInt(quantity),Double.parseDouble(price),productName);
 		System.out.println(item);
@@ -126,22 +129,24 @@ public class cartController {
 			
 		}
 		cart=cartService.getCartById(userId);
-		
+//		int availableQuantity = 3; //http call;
+//				
+//		if(Integer.parseInt(quantity)>availableQuantity) {
+//			response.put("response","Qty Unavailable");
+//		}
 		cart.get().setValue(cart.get().getValue()+ item.getPrice()*item.getQuantity());
 		cart.get().setTotalItems(cart.get().getTotalItems()+ item.getQuantity());
 		cart.get().setShopId(shopId);
 		item.setCart(cart.get());
 		itemService.addItem(item);
-		HashMap<String,String> response = new HashMap<String,String>();
 		response.put("response","success");
 		return response;
 	}
 	
-	
 	@RequestMapping(value="/updateItemQuantity",method=RequestMethod.POST)
 	public HashMap<String,String> updateItemQuantity(@RequestBody HashMap<String,String> request)
 	{
-		String userId = request.get("userId");
+		String userId = request.get("username");
 		String productId = request.get("productId");
 		String quantity = request.get("quantity");
 		HashMap<String,String> cartPresent = addNewCart(userId);
@@ -157,7 +162,7 @@ public class cartController {
 		itemService.updateItem(item.get());
 		cartService.updateCart(cart);
 		HashMap<String,String> response = new HashMap<String,String>();
-		response.put("response","succeses");
+		response.put("response","success");
 		return response;
 	}
 	

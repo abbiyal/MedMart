@@ -35,7 +35,7 @@ public class Users {
 	private String password;
 	@Column(name="Address")
 	private String address;
-	@Column(name="Phone",unique=true)
+	@Column(name="Phone")
 	private String phone;
 	@NotNull
 	private String role;

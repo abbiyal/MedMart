@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -54,7 +55,6 @@ public class SearchService {
 	@Autowired
 	ShopsElasticRepository shopElasticRepository;
 
-	
 	public List<ProductCatalogue> findbyKeyword(String keyword){
 		Iterable<ProductCatalogue> products=productElasticRepository.findByProductName(keyword);
 		List<ProductCatalogue> productMatches = new ArrayList<ProductCatalogue>();
@@ -72,34 +72,39 @@ public class SearchService {
             {
   
                 productIds.add(t.getProductId());
+                System.out.println(t.getProductId());
             }
 		});
+		System.out.println("productIds from findproductsinshop "+ productIds.size());
 		JSONArray productIdsArray = new JSONArray(productIds);
 		ArrayList response = new ArrayList<HashMap<String,String>>();
 		List<ProductCatalogue> products = productElasticRepository.searchShopProducts(productIdsArray);
+		System.out.println("here size is:"+ products.size());
 		for(int i = 0;i<products.size();i++) {
 			HashMap<String,String> map = new HashMap<String,String>();
 			String productId = products.get(i).getProductId();
 			Iterable<Inventory> product = inventoryElasticRepository
-					.findByProductIdAndQuantityGreaterThan(productId,1);
+					.findByProductIdAndShopIdAndQuantityGreaterThan(productId,shopId,0);
 			
+			final int index = i;
 			product.forEach(new Consumer<Inventory>() {
 			
 			@Override
             public void accept(Inventory t)
             {
-  
 				map.put("price", String.valueOf((t.getPrice())));
+				map.put("id",products.get(index).getProductId());
+				map.put("companyName", products.get(index).getCompanyName());
+				map.put("doseStrength", products.get(index).getDoseStrength());
+				map.put("productName", products.get(index).getProductName());
+				map.put("size", products.get(index).getSize());
+				map.put("type", products.get(index).getType());
+				response.add(map);
             }
 		});
-			map.put("id", products.get(i).getProductId());
-			map.put("companyName", products.get(i).getCompanyName());
-			map.put("doseStrength", products.get(i).getDoseStrength());
-			map.put("productName", products.get(i).getProductName());
-			map.put("size", products.get(i).getSize());
-			map.put("type", products.get(i).getType());
 			
-			response.add(map);
+			
+			
 		}
 		return response;
 	}
@@ -139,7 +144,8 @@ public class SearchService {
 	};
 	
 	public List<NearbyShopResponse> findShopsHavingProducts(String productId,String location){
-		Iterable<Inventory> inventoryProducts = inventoryElasticRepository.findByProductIdAndQuantityGreaterThan(productId,1);
+		Iterable<Inventory> inventoryProducts = inventoryElasticRepository.
+				findByProductIdAndQuantityGreaterThan(productId,0);
 		List<Long> shopIds = new ArrayList<Long>();
 		inventoryProducts.forEach(new Consumer<Inventory>() {
 			@Override
@@ -187,8 +193,38 @@ public class SearchService {
 		List<ProductCatalogue> products = productElasticRepository.findByTypeAndProductName(category,keyword);
 		return products;
 	}
-
-	public List<ProductCatalogue> searchProductsWithinShop(String category,Long shopId,String keyword){
+	
+	public List<HashMap<String,String>> getPriceForProducts(List<ProductCatalogue> products,Long shopId){
+		
+		ArrayList response = new ArrayList<HashMap<String,String>>();
+		for(int i = 0;i<products.size();i++) {
+			HashMap<String,String> map = new HashMap<String,String>();
+			String productId = products.get(i).getProductId();
+			Iterable<Inventory> product = inventoryElasticRepository
+					.findByProductIdAndShopIdAndQuantityGreaterThan(productId,shopId,0);
+			final int index = i;
+			product.forEach(new Consumer<Inventory>() {
+			@Override
+            public void accept(Inventory t)
+            {
+  
+				map.put("price", String.valueOf((t.getPrice())));
+				map.put("id",products.get(index).getProductId());
+				map.put("companyName", products.get(index).getCompanyName());
+				map.put("doseStrength", products.get(index).getDoseStrength());
+				map.put("productName", products.get(index).getProductName());
+				map.put("size", products.get(index).getSize());
+				map.put("type", products.get(index).getType());
+				response.add(map);
+            }
+		});
+		}
+		return response;
+		
+		
+	}
+	
+	public List<HashMap<String,String>> searchProductsWithinShop(String category,Long shopId,String keyword){
 		Iterable<Inventory> inventoryProducts = inventoryElasticRepository.findByShopId(shopId);
 		List<String> productIds = new ArrayList<String>();
 		inventoryProducts.forEach(new Consumer<Inventory>() {
@@ -201,16 +237,30 @@ public class SearchService {
             }
 		});
 		JSONArray productIdsArray = new JSONArray(productIds);
-		if(category.contentEquals("All")) {
+		String query = "\"" +keyword+"\"";
+		String categoryquery = "\""+category+"\"";
+		if(category.contentEquals("ALL")) {
 			List<ProductCatalogue> products = productElasticRepository
-					.searchShopProductsWithKeyword(productIdsArray,keyword);
-			return products;
+					.searchShopProductsWithKeyword(productIdsArray,query);
+			List<HashMap<String,String>> response =  getPriceForProducts(products,shopId);
+			return response;
 			
 		}
 		List<ProductCatalogue> products = productElasticRepository
-				.searchShopProductsWithKeywordAndCategory(productIdsArray,keyword,category);
-		return products;
+				.searchShopProductsWithKeywordAndCategory(productIdsArray,query,categoryquery);
+		
+		List<HashMap<String,String>> response =  getPriceForProducts(products,shopId);
+		return response;
 		
 	}
 
+	public List<ProductCatalogue> findProductById(JSONArray productIds){
+		List<ProductCatalogue> products = productElasticRepository.searchShopProducts(productIds);
+		return products;
+	}
+	
+	public Optional<Shops> findShopById(Long shopId){
+		Optional<Shops> shop = shopElasticRepository.findById(shopId);
+		return shop;
+	}
 }

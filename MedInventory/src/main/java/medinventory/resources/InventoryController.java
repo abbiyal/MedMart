@@ -1,5 +1,9 @@
 package medinventory.resources;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import medinventory.models.Inventory;
+import medinventory.models.ProductCatalogue;
 import medinventory.services.MedInventoryService;
 
 @RestController
@@ -47,5 +52,18 @@ public class InventoryController {
 	@RequestMapping(value="/deleteInventory/{id}",method=RequestMethod.GET)
 	public boolean deleteRecord(@PathVariable("id") String id){
 		return inventoryService.deleteRecord(id);
+	}
+	
+	@RequestMapping(value = "/verifyquantity", method=RequestMethod.POST)
+	public HashMap<String,List<String>> verifyquantity(@RequestBody HashMap<String,List<String>> request){
+		System.out.println("verifyqquantitycontroller");
+		return inventoryService.verifyAndDecreaseQuantity(request);
+		
+	}
+	
+	@RequestMapping(value = "/increasequantity",method=RequestMethod.POST)
+	public HashMap<String,String> decreaseQuantityOnFailure(@RequestBody HashMap<String,List<String>> request){
+		System.out.println("decreases");
+		return inventoryService.increaseQuantityOnFailure(request);
 	}
 }

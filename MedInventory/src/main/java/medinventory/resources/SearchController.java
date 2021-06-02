@@ -2,8 +2,9 @@ package medinventory.resources;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
-
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -48,6 +49,7 @@ public class SearchController {
 	
 	@RequestMapping(value = "/search/nearbyShops",method = RequestMethod.GET)
 	public List<NearbyShopResponse> findnearbyshops(@RequestParam(name="location") String location){
+		System.out.println("NEarbySHops");
 		List<NearbyShopResponse> nearbyShops = productSearchService.findNearbyShops(location);
 		return nearbyShops;
 	}
@@ -69,7 +71,6 @@ public class SearchController {
 		return productsOfGivenCategory;
 	}
 
-	
 	@RequestMapping(value = "/search/withincategory", method = RequestMethod.POST)
 	public List<ProductCatalogue> findProductsWithinCategory(@RequestBody HashMap<String,String> request){
 		String category = request.get("category");
@@ -78,4 +79,38 @@ public class SearchController {
 		return products;
 		
 	}
+	
+	@RequestMapping(value = "/search/searchWithinShop",method = RequestMethod.POST)
+	public List<HashMap<String, String>> searchWithinShop(@RequestBody HashMap<String,String> request){
+		String query = request.get("query");
+		Long shopId = Long.parseLong(request.get("shopId"));
+		String category = request.get("category");
+		System.out.println("killer");
+		return productSearchService.searchProductsWithinShop(category, shopId, query);
+	}
+	
+	@RequestMapping(value = "/search/findProductById",method = RequestMethod.POST)
+	public List<ProductCatalogue> findPrdouctById(@RequestBody List<String> values){
+		for (int i = 0; i < values.size(); i++) {
+			System.out.println("hello");
+			System.out.println(values.get(i));
+		}
+		JSONArray products = new JSONArray(values);
+		
+		return productSearchService.findProductById(products);
+	}
+	
+	@RequestMapping(value = "/search/findShopById",method = RequestMethod.GET)
+	public HashMap<String,String> findShopById(@RequestParam(value = "shopId") String shopId){
+		Long shopIds = Long.parseLong(shopId);
+		Optional<Shops> shop = productSearchService.findShopById(shopIds);
+		HashMap<String,String> response = new HashMap<String,String>();
+		if(!shop.isPresent()) {
+			return response;
+		}
+		response.put("address",shop.get().getAddress());
+		response.put("name",shop.get().getShopName());
+		return response; 
+	}
+	
 }
