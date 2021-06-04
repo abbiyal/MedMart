@@ -32,14 +32,14 @@ public class ItemService {
 		itemRepository.deleteItemByCartId(cartId);
 		return "item deleted";
 	}
-	public String deleteItemCart(long cartId,long itemId)
+	public String deleteItemCart(long cartId,String itemId)
 	{
 		itemRepository.deleteItemCart(cartId, itemId);
 		return "deleted item successfully";
 	}
-	public Optional<Item> getItemByItemAndCartId(long cartId,long itemId)
+	public Optional<Item> getItemByItemAndCartId(long cartId,String productId)
 	{
-		return itemRepository.findItemByItemandCartId(cartId, itemId);
+		return itemRepository.findItemByItemandCartId(cartId, productId);
 	}
 
 	public List<Item> getItemsByCartId(long cartId) {

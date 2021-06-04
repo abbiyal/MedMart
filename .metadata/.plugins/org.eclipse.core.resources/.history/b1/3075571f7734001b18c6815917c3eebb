@@ -1,0 +1,29 @@
+package medcart.models;
+
+import java.util.List;
+
+public class ItemList {
+	
+	private List<Item> orderItemList;
+
+	public ItemList() {
+		
+	}
+
+	
+	public ItemList(List<Item> orderItemList) {
+		this.orderItemList = orderItemList;
+	}
+
+
+	public List<Item> getOrderItemList() {
+		return orderItemList;
+	}
+
+	public void setOrderItemList(List<Item> orderItemList) {
+		this.orderItemList = orderItemList;
+	}
+	
+	
+
+}

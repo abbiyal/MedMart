@@ -20,77 +20,83 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	@NotNull
-	private long itemId;
+	private String productId;
 	@OneToOne(fetch=FetchType.EAGER)
 	private Cart cart;
 	@NotNull
 	private int quantity;
 	@NotNull
 	private double price;
-	private String name;
-	private String imageUrl;
-		
+	private String productName;
+	
+	
 	public Item() {
 		
 	}
-	public Item(long itemId, Cart cart, int quantity, double price, String name, String imageUrl) {
-		this.itemId = itemId;
-		this.cart = cart;
+
+	public Item(String productId,  int quantity, double price, String productName) {
+		
+		this.productId = productId;
 		this.quantity = quantity;
 		this.price = price;
-		this.name = name;
-		this.imageUrl = imageUrl;
+		this.productName = productName;
 	}
+
 	public long getId() {
 		return id;
 	}
+
 	public void setId(long id) {
 		this.id = id;
 	}
-	public long getItemId() {
-		return itemId;
+
+	public String getProductId() {
+		return productId;
 	}
-	public void setItemId(long itemId) {
-		this.itemId = itemId;
+
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
+
 	public Cart getCart() {
 		return cart;
 	}
+
 	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
+
 	public int getQuantity() {
 		return quantity;
 	}
+
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+
 	public double getPrice() {
 		return price;
 	}
+
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public String getName() {
-		return name;
+
+	public String getProductName() {
+		return productName;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
-	public String getImageUrl() {
-		return imageUrl;
-	}
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
+
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", itemId=" + itemId + ", cart=" + cart + ", quantity=" + quantity + ", price="
-				+ price + ", name=" + name + ", imageUrl=" + imageUrl + "]";
+		return "Item [id=" + id + ", productId=" + productId + ", cart=" + cart + ", quantity=" + quantity + ", price="
+				+ price + ", productName=" + productName + "]";
 	}
 	
 	
-	
-	
+		
 	
 }

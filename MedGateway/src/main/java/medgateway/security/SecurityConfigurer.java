@@ -1,5 +1,7 @@
 package medgateway.security;
 
+import java.security.SecureRandom;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 import com.mysql.cj.protocol.AuthenticationProvider;
 
 import medgateway.filters.JwtRequestFilter;
+import medgateway.filters.RestEntryPoint;
 import medgateway.services.UserService;
 
 @EnableWebSecurity
@@ -43,7 +46,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder(10,new SecureRandom());
 	}
 	
 	@Bean
@@ -58,10 +61,15 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
-			.authorizeRequests().antMatchers("/api/login","/","/api/signup","/v2/api-docs","/swagger*/**","/webjars/**").permitAll()
+			.authorizeRequests().antMatchers("/api/login","/","/api/signup/**","/v2/api-docs",
+								"/swagger*/**","/webjars/**","/api/forgot/**").permitAll()
 			.anyRequest().authenticated()
 			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			
+			
+		http.exceptionHandling().authenticationEntryPoint(new RestEntryPoint());
 	    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+	    
 	}
 
 }

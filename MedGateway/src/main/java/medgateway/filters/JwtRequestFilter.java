@@ -9,6 +9,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.JwtException;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,11 +31,11 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+			throws ServletException, IOException,JwtException {
 		final String authorizationheader=request.getHeader("Authorization");
 		String username=null;
 		String jwt=null;
-		
+	
 		if(authorizationheader!=null && authorizationheader.startsWith("Bearer "))
 		{
 			jwt=authorizationheader.substring(7);

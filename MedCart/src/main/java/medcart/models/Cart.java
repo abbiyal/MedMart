@@ -29,57 +29,95 @@ public class Cart {
 	private long id;
 	@NotNull
 	private String userId;
-	private String sessionId;
 	private String status;
 	private double value;
+	private int totalItems;
+	private Long shopId;
 	
 	
 	public Cart() {
 		
 	}
 
-	public Cart(String userId, String sessionId, String status, double value) {
+
+	public Cart(String userId, String status, double value, int totalItems, Long shopId) {
 		this.userId = userId;
-		this.sessionId = sessionId;
 		this.status = status;
 		this.value = value;
-	}
-	
-	@Override
-	public String toString() {
-		return "Cart [cartId=" + id + ", userId=" + userId + ", sessionId=" + sessionId + ", status=" + status
-				+ ", value=" + value + "]";
+		this.totalItems = totalItems;
+		this.shopId = shopId;
 	}
 
-	public long getCartId() {
+
+	public long getId() {
 		return id;
 	}
-	public void setCartId(long cartId) {
-		this.id = cartId;
+
+
+	public void setId(long id) {
+		this.id = id;
 	}
+
+
 	public String getUserId() {
 		return userId;
 	}
+
+
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getSessionId() {
-		return sessionId;
-	}
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
-	}
+
+
 	public String getStatus() {
 		return status;
 	}
+
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+
 	public double getValue() {
 		return value;
 	}
+
+
 	public void setValue(double value) {
 		this.value = value;
 	}
+
+
+	public int getTotalItems() {
+		return totalItems;
+	}
+
+
+	public void setTotalItems(int totalItems) {
+		this.totalItems = totalItems;
+	}
+
+
+	public Long getShopId() {
+		return shopId;
+	}
+
+
+	public void setShopId(Long shopId) {
+		this.shopId = shopId;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Cart [id=" + id + ", userId=" + userId + ", status=" + status + ", value=" + value + ", totalItems="
+				+ totalItems + ", shopId=" + shopId + "]";
+	}
+
+	
+	
+	
+	
 
 }

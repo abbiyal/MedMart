@@ -1,6 +1,0 @@
-package medcart.models;
-
-public interface CartRepository  extends CrudRepository<Cart, long>{
-	
-
-}
